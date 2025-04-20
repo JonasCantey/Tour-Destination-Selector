@@ -10,7 +10,7 @@ import TourCard from './TourCard';
 const url = 'https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project';
 
 //The Gallery component is responsible for fetching and displaying all the tours
-const Gallery = ({ tours, setTours, onRemove }) => {
+const Gallery = ({ tours, setTours, onRemove, selectedDestination }) => {
   //A state variable to show "Loading..." while the data is being fetched
   const [loading, setLoading] = useState(true);
 
@@ -63,9 +63,13 @@ const Gallery = ({ tours, setTours, onRemove }) => {
   }
   
   //Task 2 - Fetch and render tour list with useEffect and state
+  const filteredTours =
+  selectedDestination === "All"
+    ? tours
+    : tours.filter((tour) => tour.name === selectedDestination);
 
   //If there are no tours left, show a message and a button to refresh the tours
-  if (tours.length === 0) {
+  if (filteredTours.length === 0) {
     return (
       <div className="no-tours">
         <h2>No tours left</h2>
@@ -79,7 +83,7 @@ const Gallery = ({ tours, setTours, onRemove }) => {
   //Display all the tours by creating a TourCard for each tour
   return (
     <section className="gallery">
-      {tours.map((tour) => (
+      {filteredTours.map((tour) => (
         <TourCard
           //A unique key to help React keep track of each tour
           key={tour.id}
